@@ -1,0 +1,14 @@
+# Plugin developed by zImpoo [Telegram: @tentava | Discord: Impopite]
+
+prefix: "&8&l(&6&lᴘʀᴏᴊᴇᴄᴛ ɴᴀᴍᴇ&8&l) &r" # Leave the final space
+
+vars:
+  normal: "<#9A9A9A>"
+  error: "<#CE0000>"
+  success: "<#06BB00>"
+
+message:
+  no-permission: "You don't have enough permissions!"
+  console-cant-do-command: "Only players can execute this command"
+  unknown-command: "Unknown command."
+  player-not-found: "Player not found."

@@ -1,0 +1,6 @@
+name: DefaultProject
+version: '${version}'
+
+main: it.impo.defaultProject.DefaultProject
+api-version: '1.21.8'
+load: POSTWORLD
