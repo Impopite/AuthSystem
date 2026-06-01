@@ -1,6 +1,5 @@
-package it.impo.defaultProject.config.base;
+package it.impo.authSystem.config.base;
 
-import lombok.Getter;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,7 +12,6 @@ import java.io.*;
 
 public class FileHandler {
 
-    @Getter
     private final File file;
     private FileConfiguration config;
 
@@ -88,5 +86,9 @@ public class FileHandler {
 
     private static void getDataFolder(@NotNull Plugin plugin) {
         plugin.getDataFolder().mkdirs();
+    }
+
+    public @NotNull File getFile() {
+        return file;
     }
 }

@@ -1,6 +1,7 @@
 # Plugin developed by zImpoo [Telegram: @tentava | Discord: Impopite]
 
-prefix: "&8&l(&6&lᴘʀᴏᴊᴇᴄᴛ ɴᴀᴍᴇ&8&l) &r" # Lasciare spazio finale
+prefix: "<#3C3C3C>(<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ<#3C3C3C>) <r>"
+prefix-chat: "<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ <#3C3C3C>» <r>"
 
 vars:
   normal: "<#9A9A9A>"
@@ -8,7 +9,44 @@ vars:
   success: "<#06BB00>"
 
 message:
-  no-permission: "Non hai abbastanza permessi!"
-  console-cant-do-command: "Solo un player può eseguire questo comando"
-  unknown-command: "Comando sconosciuto."
-  player-not-found: "Player non trovato."
+  no-permission: "<error>Non hai abbastanza permessi!"
+  console-cant-do-command: "<error>Solo un player può eseguire questo comando"
+  unknown-command: "<error>Comando sconosciuto."
+  player-not-found: "<error>Player non trovato."
+  generic-error: "<error>Si è verificato un errore."
+  player-not-found-in-database: "<error>Player non trovato nel database."
+  too-much-failed-try: "<error>Troppi tentativi falliti."
+  action-before-login: "<error>Devi essere autenticato per eseguire questa azione!"
+  last-ip: "<normal>Ultimo IP di <white><target_name> <normal>: <white><last_ip>"
+  failed-auth-time: "<error>Non ti sei autenticato in tempo!"
+
+register:
+  need-register: "<normal>Non sei registrato. Usa il comando <white>/register (password) (password) <normal>per registrarti."
+  registered: "<success>Registrazione avvenuta con successo!"
+  already-registered: "<error>Sei già registrato!"
+  password-mismatch: "<error>Le password non corrispondono!"
+  password-too-short: "<error>La password deve essere lunga almeno 6 caratteri!"
+  failed-registration: "<error>Registrazione fallita. Riprova più tardi o contatta un amministratore."
+
+login:
+  need-login: "<normal>Usa il comando <white>/login (password) <normal>per accedere al tuo account."
+  logged-in: "<success>Accesso effettuato con successo!"
+  login-premium: "<success>Accesso automatico effettuato!"
+  already-logged-in: "<error>Sei già autenticato!"
+  wrong-password: "<error>Password errata! <normal>Tentativi rimasti: <white><remaining_try>"
+
+change-password:
+  password-changed: "<success>Password cambiata con successo!"
+  new-password-too-short: "<error>La nuova password deve essere lunga almeno 6 caratteri!"
+  old-password-is-wrong: "<error>La vecchia password è errata!"
+  error-changing-password: "<error>Errore durante il cambio password. Riprova più tardi o contatta un amministratore."
+  admin-change-password: "<success>Password del giocatore <white><target_name> <success>cambiata con successo!"
+
+unregister:
+  unregistered-by-admin: "<normal>Sei stato disregistrato da un amministratore."
+  unregistered-admin: "<success>Il giocatore <white><target_name> <success>è stato disregistrato con successo!"
+
+premium:
+  confirm-premium: "<normal>Ripeti il comando per confermare."
+  premium-confirmed: "<success>Accesso premium confermato!"
+  premium-removed: "<success>Accesso premium rimosso!"

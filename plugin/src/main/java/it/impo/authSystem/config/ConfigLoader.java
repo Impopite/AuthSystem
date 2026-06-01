@@ -1,7 +1,6 @@
-package it.impo.defaultProject.config;
+package it.impo.authSystem.config;
 
-import it.impo.defaultProject.config.constant.ConfigKey;
-import lombok.Getter;
+import it.impo.authSystem.config.constant.ConfigKey;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,7 +14,6 @@ public class ConfigLoader {
     private final BukkitAudiences adventure;
 
     private FileConfiguration config;
-    @Getter
     private LangLoader langLoader;
 
     public ConfigLoader(@NotNull JavaPlugin plugin, @NotNull BukkitAudiences adventure) {
@@ -71,5 +69,9 @@ public class ConfigLoader {
         plugin.getLogger().warning(
                 "[Config] " + (empty ? "Empty" : "Invalid") + " value for '" + key.getPath() + "' — using default: " + defaultValue
         );
+    }
+
+    public @NotNull LangLoader getLangLoader(){
+        return langLoader;
     }
 }
