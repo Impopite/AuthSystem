@@ -7,9 +7,9 @@ database:
   host: "localhost"
   username: "root"
   password: ""
-  port: "3306"
-  databaseName: "DatabaseName"
-  ssl: true
+  port: 3306
+  name: "ImpooProjects"
+  ssl: false
 
 auth:
   timeout-seconds: 60

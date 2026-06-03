@@ -1,5 +1,5 @@
 name: AuthSystem
-version: '${version}'
+version: '1.0.0'
 
 main: it.impo.authSystem.AuthSystem
 api-version: '1.21.8'

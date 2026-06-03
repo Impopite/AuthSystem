@@ -128,7 +128,7 @@ public class BaseAuthManager extends AuthManager {
                 }
 
                 sync(() -> lang.send(player, LangKey.WRONG_PASSWORD,
-                        Placeholder.parsed("<remaining_try>", String.valueOf(remaining))));
+                        Placeholder.parsed("remaining_try", String.valueOf(remaining))));
                 return;
             }
 
@@ -186,29 +186,27 @@ public class BaseAuthManager extends AuthManager {
 
         plugin.getAuthTable().updatePassword(targetName, BaseAuthTable.hashPassword(newPassword))
                 .thenAccept(success -> sync(() -> {
-                    if (success) lang.send(admin, LangKey.ADMIN_CHANGE_PASSWORD, Placeholder.parsed("<target_name>", targetName));
+                    if (success) lang.send(admin, LangKey.ADMIN_CHANGE_PASSWORD, Placeholder.parsed("target_name", targetName));
                     else lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
                 }));
     }
 
     @Override
     public void unregister(Player admin, String targetName) {
-        plugin.getAuthTable().unregisterPlayer(targetName).thenAccept(success -> {
-            sync(() -> {
-                if (!success) {
-                    lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
-                    return;
-                }
+        plugin.getAuthTable().unregisterPlayer(targetName).thenAccept(success -> sync(() -> {
+            if (!success) {
+                lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
+                return;
+            }
 
-                Player target = Bukkit.getPlayerExact(targetName);
-                if (target != null) {
-                    authenticated.remove(target.getUniqueId());
-                    waitingAuth.add(target.getUniqueId());
-                    lang.send(target, LangKey.UNREGISTERED_BY_ADMIN);
-                }
-                lang.send(admin, LangKey.UNREGISTERED_ADMIN, Placeholder.parsed("<target_name>", targetName));
-            });
-        });
+            Player target = Bukkit.getPlayerExact(targetName);
+            if (target != null) {
+                authenticated.remove(target.getUniqueId());
+                waitingAuth.add(target.getUniqueId());
+                lang.send(target, LangKey.UNREGISTERED_BY_ADMIN);
+            }
+            lang.send(admin, LangKey.UNREGISTERED_ADMIN, Placeholder.parsed("target_name", targetName));
+        }));
     }
 
     @Override
@@ -216,8 +214,8 @@ public class BaseAuthManager extends AuthManager {
         plugin.getAuthTable().getLastIp(targetName).thenAccept(opt -> sync(() -> {
             if (opt.isEmpty()) lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
             else lang.send(admin, LangKey.LAST_IP,
-                    Placeholder.parsed("<target_name>", targetName),
-                    Placeholder.parsed("<last_ip>", opt.get()));
+                    Placeholder.parsed("target_name", targetName),
+                    Placeholder.parsed("last_ip", opt.get()));
         }));
     }
 

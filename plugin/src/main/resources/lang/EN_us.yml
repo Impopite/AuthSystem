@@ -1,7 +1,7 @@
 # Plugin developed by zImpoo [Telegram: @tentava | Discord: Impopite]
 
-prefix: "<#3C3C3C>(<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ<#3C3C3C>) <r>"
-prefix-chat: "<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ <#3C3C3C>» <r>"
+prefix: "<#3C3C3C>(<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ<#3C3C3C>)"
+prefix-chat: "<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ <#3C3C3C>»"
 
 vars:
   normal: "<#9A9A9A>"
