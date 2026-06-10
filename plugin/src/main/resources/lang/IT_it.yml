@@ -1,12 +1,15 @@
 # Plugin developed by zImpoo [Telegram: @tentava | Discord: Impopite]
 
+# Prefix del plugin
 prefix: "\n<#3C3C3C>(<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ<#3C3C3C>) \n"
 
+# Variabili per i colori dei messaggi
 vars:
   normal: "<#9A9A9A>"
   error: "<#CE0000>"
   success: "<#06BB00>"
 
+# Messaggi generali di errori e informazioni
 message:
   no-permission: "<error>Non hai abbastanza permessi!"
   console-cant-do-command: "<error>Solo un player può eseguire questo comando"
@@ -19,35 +22,66 @@ message:
   last-ip: "<normal>Ultimo IP di <white><target_name> <normal>: <white><last_ip>"
   failed-auth-time: "<error>Non ti sei autenticato in tempo!"
 
+# Messaggi del register
 register:
+  # Messaggio inviato al giocatore non registrato quando entra nel server
   need-register: "<normal>Non sei registrato. Usa il comando <white>/register (password) (password) <normal>per registrarti."
+  # Messaggio inviato quando la registrazione va a buon fine
   registered: "<success>Registrazione avvenuta con successo!"
+  # Messaggio inviato quando il giocatore tenta di registrarsi ma è già registrato
   already-registered: "<error>Sei già registrato!"
+  # Messaggio inviato quando le due password inserite non coincidono
   password-mismatch: "<error>Le password non corrispondono!"
+  # Messaggio inviato quando la password inserita è troppo corta (meno di 6 caratteri)
   password-too-short: "<error>La password deve essere lunga almeno 6 caratteri!"
+  # Messaggio inviato quando si verifica un errore interno durante la registrazione
   failed-registration: "<error>Registrazione fallita. Riprova più tardi o contatta un amministratore."
 
+# Messaggi del login
 login:
+  # Messaggio inviato al giocatore registrato ma non ancora loggato quando entra nel server
   need-login: "<normal>Usa il comando <white>/login (password) <normal>per accedere al tuo account."
+  # Messaggio inviato quando il login va a buon fine
   logged-in: "<success>Accesso effettuato con successo!"
+  # Messaggio inviato quando un giocatore premium viene autenticato automaticamente senza password
   login-premium: "<success>Accesso automatico effettuato!"
+  # Messaggio inviato quando il giocatore tenta di loggarsi ma è già autenticato
   already-logged-in: "<error>Sei già autenticato!"
+  # Messaggio inviato quando il giocatore inserisce la password sbagliata
+  # <remaining_try> = numero di tentativi rimasti prima del kick/ban
   wrong-password: "<error>Password errata! <normal>Tentativi rimasti: <white><remaining_try>"
+  # Messaggio di kick inviato quando il giocatore esaurisce i tentativi (se configurato il kick)
   wrong-password-kick: "<error>Hai sbagliato troppe volte la password!"
+  # Messaggio di kick inviato quando il giocatore esaurisce i tentativi (se configurato il ban)
   wrong-password-ban: "<error>Hai sbagliato troppe volte la password!\n <normal>Sei stato bannato!\n Contatta un amministratore per essere sbannato."
 
+# Messaggi del cambio password
 change-password:
+  # Messaggio inviato quando il cambio password va a buon fine
   password-changed: "<success>Password cambiata con successo!"
+  # Messaggio inviato quando la nuova password inserita è troppo corta (meno di 6 caratteri)
   new-password-too-short: "<error>La nuova password deve essere lunga almeno 6 caratteri!"
+  # Messaggio inviato quando la vecchia password inserita è errata
   old-password-is-wrong: "<error>La vecchia password è errata!"
+  # Messaggio inviato quando si verifica un errore interno durante il cambio password
   error-changing-password: "<error>Errore durante il cambio password. Riprova più tardi o contatta un amministratore."
+  # Messaggio inviato all'admin quando cambia la password di un altro giocatore
+  # <target_name> = nome del giocatore a cui è stata cambiata la password
   admin-change-password: "<success>Password del giocatore <white><target_name> <success>cambiata con successo!"
 
+# Messaggi della disregistrazione
 unregister:
+  # Messaggio inviato al giocatore che viene disregistrato da un amministratore
   unregistered-by-admin: "<normal>Sei stato disregistrato da un amministratore."
+  # Messaggio inviato all'admin che ha disregistrato un giocatore
+  # <target_name> = nome del giocatore disregistrato
   unregistered-admin: "<success>Il giocatore <white><target_name> <success>è stato disregistrato con successo!"
 
+# Messaggi del sistema premium
 premium:
+  # Messaggio inviato quando il giocatore esegue il comando premium per la prima volta (richiede conferma)
   confirm-premium: "<normal>Ripeti il comando per confermare."
+  # Messaggio inviato quando l'accesso premium viene attivato con successo
   premium-confirmed: "<success>Accesso premium confermato!"
+  # Messaggio inviato quando l'accesso premium viene rimosso con successo
   premium-removed: "<success>Accesso premium rimosso!"
