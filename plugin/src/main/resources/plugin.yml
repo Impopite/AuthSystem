@@ -1,6 +1,6 @@
-name: DefaultProject
-version: '${version}'
+name: AuthSystem
+version: '1.0.0'
 
-main: it.impo.defaultProject.DefaultProject
+main: it.impo.authSystem.AuthSystem
 api-version: '1.21.8'
 load: POSTWORLD

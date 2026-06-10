@@ -1,4 +1,4 @@
-rootProject.name = "DefaultProject"
+rootProject.name = "AuthSystem"
 
 include("api")
 include("plugin")

@@ -1,10 +1,8 @@
-package it.impo.defaultProject.database.utils;
+package it.impo.authSystem.database.utils;
 
-import it.impo.defaultProject.DefaultProject;
-import it.impo.defaultProject.config.constant.ConfigKey;
-import lombok.Getter;
+import it.impo.authSystem.AuthSystem;
+import it.impo.authSystem.config.constant.ConfigKey;
 
-@Getter
 public class DatabaseCredentials {
 
     private final String host;
@@ -14,7 +12,7 @@ public class DatabaseCredentials {
     private final int port;
     private final boolean ssl;
 
-    public DatabaseCredentials(DefaultProject plugin) {
+    public DatabaseCredentials(AuthSystem plugin) {
         var config = plugin.getConfigLoader();
         this.host = config.get(ConfigKey.DATABASE_HOST, "localhost");
         this.database = config.get(ConfigKey.DATABASE_NAME, "DefaultDatabaseName");
@@ -22,5 +20,29 @@ public class DatabaseCredentials {
         this.password = config.get(ConfigKey.DATABASE_PASSWORD, "");
         this.port = config.get(ConfigKey.DATABASE_PORT, 3306);
         this.ssl = config.get(ConfigKey.DATABASE_SSL, false);
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public boolean isSsl() {
+        return ssl;
     }
 }

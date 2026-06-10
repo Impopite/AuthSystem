@@ -1,8 +1,5 @@
-package it.impo.defaultProject.config.constant;
+package it.impo.authSystem.config.constant;
 
-import lombok.Getter;
-
-@Getter
 public enum ConfigKey {
 
     DATABASE_HOST("database.host"),
@@ -12,6 +9,9 @@ public enum ConfigKey {
     DATABASE_PORT("database.port"),
     DATABASE_SSL("database.ssl"),
 
+    TOO_MANY_ATTEMPTS("auth.too-many-attempts"),
+    BAN_TIME("auth.ban-time"),
+
     LANG_FILE("generic.lang");
 
     private final String path;
@@ -20,4 +20,7 @@ public enum ConfigKey {
         this.path = path;
     }
 
+    public String getPath() {
+        return path;
+    }
 }

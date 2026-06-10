@@ -1,14 +1,87 @@
 # Plugin developed by zImpoo [Telegram: @tentava | Discord: Impopite]
 
-prefix: "&8&l(&6&lᴘʀᴏᴊᴇᴄᴛ ɴᴀᴍᴇ&8&l) &r" # Leave the final space
+# Plugin prefix
+prefix: "\n<#3C3C3C>(<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ<#3C3C3C>) \n"
 
+# Color variables for messages
 vars:
   normal: "<#9A9A9A>"
   error: "<#CE0000>"
   success: "<#06BB00>"
 
+# General error and info messages
 message:
-  no-permission: "You don't have enough permissions!"
-  console-cant-do-command: "Only players can execute this command"
-  unknown-command: "Unknown command."
-  player-not-found: "Player not found."
+  no-permission: "<error>You don't have enough permissions!"
+  console-cant-do-command: "<error>Only a player can execute this command"
+  unknown-command: "<error>Unknown command."
+  player-not-found: "<error>Player not found."
+  generic-error: "<error>An error occurred."
+  player-not-found-in-database: "<error>Player not found in the database."
+  too-much-failed-try: "<error>Too many failed attempts."
+  action-before-login: "<error>You must be authenticated to perform this action!"
+  last-ip: "<normal>Last IP of <white><target_name> <normal>: <white><last_ip>"
+  failed-auth-time: "<error>You did not authenticate in time!"
+
+# Register messages
+register:
+  # Message sent to the unregistered player when they join the server
+  need-register: "<normal>You are not registered. Use <white>/register (password) (password) <normal>to register."
+  # Message sent when the registration is successful
+  registered: "<success>Registration completed successfully!"
+  # Message sent when the player tries to register but is already registered
+  already-registered: "<error>You are already registered!"
+  # Message sent when the two passwords entered do not match
+  password-mismatch: "<error>Passwords do not match!"
+  # Message sent when the entered password is too short (less than 6 characters)
+  password-too-short: "<error>The password must be at least 6 characters long!"
+  # Message sent when an internal error occurs during registration
+  failed-registration: "<error>Registration failed. Please try again later or contact an administrator."
+
+# Login messages
+login:
+  # Message sent to the registered but not yet logged-in player when they join the server
+  need-login: "<normal>Use <white>/login (password) <normal>to access your account."
+  # Message sent when the login is successful
+  logged-in: "<success>Login successful!"
+  # Message sent when a premium player is automatically authenticated without a password
+  login-premium: "<success>Automatic login successful!"
+  # Message sent when the player tries to log in but is already authenticated
+  already-logged-in: "<error>You are already logged in!"
+  # Message sent when the player enters the wrong password
+  # <remaining_try> = number of attempts remaining before kick/ban
+  wrong-password: "<error>Wrong password! <normal>Remaining attempts: <white><remaining_try>"
+  # Kick message sent when the player runs out of attempts (if kick is configured)
+  wrong-password-kick: "<error>You have entered the wrong password too many times!"
+  # Kick message sent when the player runs out of attempts (if ban is configured)
+  wrong-password-ban: "<error>You have entered the wrong password too many times!\n <normal>You have been banned!\n Contact an administrator to be unbanned."
+
+# Change password messages
+change-password:
+  # Message sent when the password change is successful
+  password-changed: "<success>Password changed successfully!"
+  # Message sent when the new password entered is too short (less than 6 characters)
+  new-password-too-short: "<error>The new password must be at least 6 characters long!"
+  # Message sent when the old password entered is wrong
+  old-password-is-wrong: "<error>The old password is incorrect!"
+  # Message sent when an internal error occurs during the password change
+  error-changing-password: "<error>Error while changing password. Please try again later or contact an administrator."
+  # Message sent to the admin when they change another player's password
+  # <target_name> = name of the player whose password was changed
+  admin-change-password: "<success>Password of player <white><target_name> <success>changed successfully!"
+
+# Unregister messages
+unregister:
+  # Message sent to the player who is unregistered by an administrator
+  unregistered-by-admin: "<normal>You have been unregistered by an administrator."
+  # Message sent to the admin who unregistered a player
+  # <target_name> = name of the unregistered player
+  unregistered-admin: "<success>Player <white><target_name> <success>has been unregistered successfully!"
+
+# Premium system messages
+premium:
+  # Message sent when the player runs the premium command for the first time (requires confirmation)
+  confirm-premium: "<normal>Repeat the command to confirm."
+  # Message sent when premium access is successfully enabled
+  premium-confirmed: "<success>Premium access confirmed!"
+  # Message sent when premium access is successfully removed
+  premium-removed: "<success>Premium access removed!"

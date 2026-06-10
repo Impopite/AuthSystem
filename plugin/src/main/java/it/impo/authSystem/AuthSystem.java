@@ -1,24 +1,28 @@
-package it.impo.defaultProject;
+package it.impo.authSystem;
 
-import it.impo.defaultProject.api.DefaultProjectApi;
-import it.impo.defaultProject.config.ConfigLoader;
-import it.impo.defaultProject.database.utils.DatabaseCredentials;
-import it.impo.defaultProject.database.utils.HikariCP;
-import lombok.Getter;
+import it.impo.authSystem.api.AuthSystemApi;
+import it.impo.authSystem.api.database.AuthTable;
+import it.impo.authSystem.api.manager.AuthManager;
+import it.impo.authSystem.config.ConfigLoader;
+import it.impo.authSystem.config.LangLoader;
+import it.impo.authSystem.database.BaseAuthTable;
+import it.impo.authSystem.database.utils.DatabaseCredentials;
+import it.impo.authSystem.database.utils.HikariCP;
+import it.impo.authSystem.loader.Loader;
+import it.impo.authSystem.manager.BaseAuthManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class DefaultProject extends JavaPlugin implements DefaultProjectApi {
+public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
 
-    @Getter
-    private final String projectName = getDescription().getName();
+    private final String projectName = this.getDescription().getName();
 
-    @Getter
     private ConfigLoader configLoader;
+    private LangLoader langLoader;
+    private AuthManager authManager;
 
     private HikariCP hikariCP;
-    @Getter
-    private DatabaseCredentials databaseCredentials;
+    private AuthTable authTable;
 
     @Override
     public void onEnable() {
@@ -32,17 +36,17 @@ public final class DefaultProject extends JavaPlugin implements DefaultProjectAp
 
         BukkitAudiences adventure = BukkitAudiences.create(this);
         this.configLoader = new ConfigLoader(this, adventure).load();
-        configLoader.load();
+        this.configLoader.load();
+        this.langLoader = configLoader.getLangLoader();
+        this.authManager = new BaseAuthManager(this);
 
-        this.databaseCredentials = new DatabaseCredentials(this);
+        DatabaseCredentials databaseCredentials = new DatabaseCredentials(this);
         this.hikariCP = new HikariCP(this, databaseCredentials);
-        /*
-        try {
-            // CREATE TABLE QUERIES...
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-         */
+        this.authTable = new BaseAuthTable(hikariCP.getDataSource());
+
+        Loader loader = new Loader(this);
+        loader.load(authTable);
+
 
         long took = System.currentTimeMillis() - start;
 
@@ -74,4 +78,26 @@ public final class DefaultProject extends JavaPlugin implements DefaultProjectAp
     private static final String CYAN = "\u001B[36m";
     private static final String GRAY = "\u001B[37m";
     private static final String WHITE = "\u001B[97m";
+
+    @Override
+    public AuthTable getAuthTable() {
+        return authTable;
+    }
+
+    @Override
+    public AuthManager getAuthManager() {
+        return authManager;
+    }
+
+    public ConfigLoader getConfigLoader() {
+        return configLoader;
+    }
+
+    public LangLoader getLangLoader(){
+        return langLoader;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
 }

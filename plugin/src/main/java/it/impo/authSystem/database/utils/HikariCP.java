@@ -1,16 +1,14 @@
-package it.impo.defaultProject.database.utils;
+package it.impo.authSystem.database.utils;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import it.impo.defaultProject.DefaultProject;
-import lombok.Getter;
+import it.impo.authSystem.AuthSystem;
 
 public class HikariCP {
 
-    @Getter
     private final HikariDataSource dataSource;
 
-    public HikariCP(DefaultProject plugin, DatabaseCredentials credentials) {
+    public HikariCP(AuthSystem plugin, DatabaseCredentials credentials) {
         HikariConfig config = new HikariConfig();
 
         config.setJdbcUrl(String.format("jdbc:mysql://%s:%s/%s",
@@ -32,5 +30,9 @@ public class HikariCP {
         if (dataSource != null && !dataSource.isClosed()) {
             dataSource.close();
         }
+    }
+
+    public HikariDataSource getDataSource() {
+        return dataSource;
     }
 }
