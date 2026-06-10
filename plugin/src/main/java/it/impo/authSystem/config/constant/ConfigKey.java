@@ -9,6 +9,9 @@ public enum ConfigKey {
     DATABASE_PORT("database.port"),
     DATABASE_SSL("database.ssl"),
 
+    TOO_MANY_ATTEMPTS("auth.too-many-attempts"),
+    BAN_TIME("auth.ban-time"),
+
     LANG_FILE("generic.lang");
 
     private final String path;

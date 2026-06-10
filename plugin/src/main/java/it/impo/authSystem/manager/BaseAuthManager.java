@@ -1,14 +1,18 @@
 package it.impo.authSystem.manager;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import it.impo.authSystem.AuthSystem;
 import it.impo.authSystem.api.manager.AuthManager;
 import it.impo.authSystem.config.LangLoader;
+import it.impo.authSystem.config.constant.ConfigKey;
 import it.impo.authSystem.config.constant.LangKey;
 import it.impo.authSystem.database.BaseAuthTable;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -124,6 +128,20 @@ public class BaseAuthManager extends AuthManager {
 
                 if (remaining <= 0) {
                     sync(() -> lang.send(player, LangKey.TOO_MUCH_FAILED_TRY));
+                    String too_many_attempts = plugin.getConfigLoader().get(ConfigKey.TOO_MANY_ATTEMPTS, "kick");
+                    if(too_many_attempts.equalsIgnoreCase("kick")) {
+                        Bukkit.getScheduler().runTask(plugin, () ->
+                                player.kick(lang.get(LangKey.WRONG_PASSWORD_KICK))
+                        );
+                    }else if(too_many_attempts.equalsIgnoreCase("ban")) {
+                        BanList<PlayerProfile> banList = Bukkit.getBanList(BanList.Type.PROFILE);
+                        banList.addBan(player.getPlayerProfile(), "Reason:", (Date) null, "Administration");
+
+                        Bukkit.getScheduler().runTask(plugin, () ->
+                            player.kick(lang.get(LangKey.WRONG_PASSWORD_BAN))
+                        );
+
+                    }
                     return;
                 }
 

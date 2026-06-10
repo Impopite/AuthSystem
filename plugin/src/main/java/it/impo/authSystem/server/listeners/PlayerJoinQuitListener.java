@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerJoinQuitListener implements Listener {
@@ -36,5 +37,11 @@ public class PlayerJoinQuitListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent event) {
         plugin.getAuthManager().onQuit(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (plugin.getAuthManager().isAuthenticated(event.getPlayer().getUniqueId())) return;
+        event.setCancelled(true);
     }
 }

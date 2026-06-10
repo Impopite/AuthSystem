@@ -1,7 +1,6 @@
 # Plugin developed by zImpoo [Telegram: @tentava | Discord: Impopite]
 
-prefix: "<#3C3C3C>(<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ<#3C3C3C>)"
-prefix-chat: "<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ <#3C3C3C>»"
+prefix: "\n<#3C3C3C>(<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ<#3C3C3C>) \n"
 
 vars:
   normal: "<#9A9A9A>"
@@ -34,6 +33,8 @@ login:
   login-premium: "<success>Accesso automatico effettuato!"
   already-logged-in: "<error>Sei già autenticato!"
   wrong-password: "<error>Password errata! <normal>Tentativi rimasti: <white><remaining_try>"
+  wrong-password-kick: "<error>Hai sbagliato troppe volte la password!"
+  wrong-password-ban: "<error>Hai sbagliato troppe volte la password!\n <normal>Sei stato bannato!\n Contatta un amministratore per essere sbannato."
 
 change-password:
   password-changed: "<success>Password cambiata con successo!"

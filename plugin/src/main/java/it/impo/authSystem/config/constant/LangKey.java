@@ -25,6 +25,8 @@ public enum LangKey {
     LOGIN_PREMIUM("login.login-premium"),
     ALREADY_LOGGED_IN("login.already-logged-in"),
     WRONG_PASSWORD("login.wrong-password"),
+    WRONG_PASSWORD_KICK("login.wrong-password-kick"),
+    WRONG_PASSWORD_BAN("login.wrong-password-ban"),
 
     PASSWORD_CHANGED("login.password-changed"),
     NEW_PASSWORD_TOO_SHORT("change-password.new-password-too-short"),
@@ -39,8 +41,7 @@ public enum LangKey {
     PREMIUM_CONFIRMED("premium.premium-confirmed"),
     PREMIUM_REMOVED("premium.premium-removed"),
 
-    PREFIX("prefix"),
-    PREFIX_CHAT("prefix-chat");
+    PREFIX("prefix");
 
     private final String path;
 

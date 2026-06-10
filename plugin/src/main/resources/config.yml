@@ -12,4 +12,6 @@ database:
   ssl: false
 
 auth:
-  timeout-seconds: 60
+  timeout-seconds: 60 # Time in seconds before the authentication process expires
+  too-many-attempts: KICK # KICK, BAN
+  ban-time: 60 # In minutes, only if "too-many-attempts" is set to BAN
