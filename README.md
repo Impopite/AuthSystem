@@ -134,7 +134,7 @@ See the **LICENSE** file for more information.
 
 If you enjoy using **AuthSystem**, consider leaving a ⭐ on GitHub and sharing it with your community.
 
-Developed with ❤️ by **zImpoo**
+Developed by **zImpoo**
 
 - Telegram → https://t.me/tentava
 - Discord → https://discord.com/users/Impopite
