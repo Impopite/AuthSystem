@@ -1,161 +1,73 @@
+# AuthSystem
 
-# 🔐 AuthSystem
+> 🔐 **Advanced Authentication System for Paper & Spigot Servers**
 
-Advanced authentication system for Minecraft servers with database support and developer API.
-
-> Complete framework for managing user authentication, with persistent database, multilingual configuration management and API for developers.
-
----
-
-## ✨ Features
-
-- 🔑 Robust authentication system
-- 💾 MySQL support with HikariCP
-- ⚙️ Advanced YAML configuration
-- 🌐 Multilingual support (IT/EN)
-- 📚 API for developers
-- 🔄 Centralized user management
-- ✅ Secure data validation
+AuthSystem is a modern authentication plugin built for Minecraft servers. It provides secure player authentication, MySQL storage, multilingual support, and a developer-friendly API to easily integrate authentication into your own plugins.
 
 ---
 
-## 📋 Requirements
+## 🚀 Features
 
-- Paper **1.21+**
-- Java **21+**
-- MySQL database
+### 🔑 Secure Authentication
+Fast and reliable login & registration system with secure data validation.
+
+### 💾 MySQL Support
+Powered by **HikariCP** for high-performance database connection pooling.
+
+### 🌍 Multilingual
+Built-in language support with configurable translations (IT/EN).
+
+### ⚙️ Fully Configurable
+Simple YAML configuration for messages, settings, and database options.
+
+### 📚 Developer API
+Easily access authentication status and player data from your own plugins.
+
+### 👥 Centralized User Management
+Manage authenticated users efficiently across your server.
 
 ---
 
 # 📦 Installation
 
-1. Download the `.jar` file
-2. Place it in the folder: `/plugins/`
-3. Restart the server
+1. Download the latest **AuthSystem.jar**
+2. Place it inside your server's **plugins/** folder
+3. Start or restart your server
+4. Configure the plugin in the generated configuration files
+5. You're ready to go!
+
+---
+
+# 🛠 Requirements
+
+- Paper **1.21+**
+- Java **21+**
+- MySQL Database
 
 ---
 
 # ✅ Compatibility
 
 | Software | Supported |
-|---|---|
+|----------|-----------|
 | Paper | ✅ |
 | Spigot | ✅ |
 | Bukkit | ✅ |
 
 ---
 
-# 🧩 Dependencies
+# 📚 Developer API
 
-## Hard Dependencies
+AuthSystem exposes a lightweight API that allows developers to:
 
-No required dependencies.
+- Check if a player is authenticated
+- Access authentication data
+- Integrate custom authentication workflows
+- Manage user information
 
-## Libraries Used
+See the [documentation](https://impoo.gitbook.io/authenticationsystem)
 
-- **Bukkit/Spigot API**: Minecraft framework
-- **HikariCP**: Database connection pooling
-- **Kyori Adventure**: Text components and messaging
-
----
-
----
-
-## 📁 Configuration
-
-```
-AuthSystem/
-├── config.yml         # Database configuration
-└── lang/
-    ├── IT_it.yml      # Italian language file
-    └── EN_us.yml      # English language file
-```
-
----
-
-# 🛠 config.yml
-
-## Example
-
-```yaml
-settings:
-  language: "en"
-  debug: false
-
-database:
-  enabled: true
-  type: "mysql"
-  host: "localhost"
-  port: 3306
-  database: "minecraft_auth"
-  username: "root"
-  password: "password"
-  ssl: false
-  max-pool-size: 10
-```
-
-## lang/EN_us.yml
-
-Messages support `&` color codes, hex colors and `<player>` placeholders where applicable.
-
-```yaml
-prefix: "\n<#3C3C3C>(<#00B4EE>ᴀᴜᴛʜ ꜱʏꜱᴛᴇᴍ<#3C3C3C>) \n"
-
-vars:
-  normal: "<#9A9A9A>"
-  error: "<#CE0000>"
-  success: "<#06BB00>"
- ...
-```
----
-
-# 📖 Configuration Explained
-
-| Path | Description |
-|---|---|
-| settings.language | Plugin language (en/it) |
-| settings.debug | Enable debug mode |
-| database.enabled | Enable database persistence |
-| database.type | Database type (mysql, mariadb) |
-| database.host | Database host |
-| database.port | Database port |
-| database.database | Database name |
-| database.username | Database username |
-| database.password | Database password |
-| database.ssl | Enable SSL connection |
-| database.max-pool-size | Connection pool size |
-
----
-
-# ⌨️ Commands
-
-| Command                                     | Description |
-|---------------------------------------------|---|
-| /auth reload                                | Reload the plugin |
-| /register <password> <password>             | Register your account |
-| /login <password>                           | Login to your account |
-| /changepassword <oldPassword> <newPassword> | Change your password |
-
----
-
-# 🔐 Permissions
-
-| Permission                    | Description                                    |
-|-------------------------------|------------------------------------------------|
-| authsystem.command.unregister | Permission to unregister player                |
-| authsystem.command.reload     | Permission to reload configuration files       |
-| authsystem.command.checkip    | Permission to check ip addresses               |
-| authsystem.command.adminChangePassword | Permission to change users password            |
-| authsystem.command.staff | Permission to the staff members                |
-| authsystem.command.admin | Permission to the administration of the server |
-
----
-
-## 🔌 API
-
-AuthSystem exposes a simple API for developers to interact with the authentication system and user data. You can use it to check authentication status, manage user data, and integrate with other plugins.
-
-### Maven
+## Maven
 
 ```xml
 <repositories>
@@ -175,7 +87,7 @@ AuthSystem exposes a simple API for developers to interact with the authenticati
 </dependencies>
 ```
 
-### Gradle
+## Gradle
 
 ```groovy
 repositories {
@@ -187,7 +99,7 @@ dependencies {
 }
 ```
 
-### Gradle (Kotlin DSL)
+## Gradle (Kotlin DSL)
 
 ```kotlin
 repositories {
@@ -198,48 +110,31 @@ dependencies {
     compileOnly("com.github.Impopite:AuthSystem:VERSION")
 }
 ```
-
-### plugin.yml
-
-Add PartySystem as a dependency in your `plugin.yml`:
-
-```yaml
-depend: [AuthSystem]
-```
-
-```java
-import it.impo.authSystem.api.AuthSystemApi;
-
-AuthSystemApi authApi = (AuthSystemApi) Bukkit.getPluginManager()
-    .getPlugin("AuthSystem");
-
-if (authApi != null) {
-    AuthManager authManager = authApi.getAuthManager();
-    AuthTable authTable = authApi.getAuthTable();
-
-}
-```
-
-## API Example
-
-```java
-// Check authentication
-if (authApi.getAuthManager().isAuthenticated(player)) {
-    // User is authenticated
-}
-```
-
 ---
 
-# 🐞 Bug Report
+# 🐞 Reporting Bugs
 
-Open an issue here:
+Found a bug or have a feature request?
+
+Open an issue on GitHub:
 
 https://github.com/Impopite/AuthSystem/issues
 
 ---
 
-## 📄 License
+# 📄 License
 
-This project is licensed under the **MIT License**.  
-Developed by **zImpoo** — [Telegram](https://t.me/tentava) · [Discord](https://discord.com/users/Impopite)
+Licensed under the **MIT License**.
+
+See the **LICENSE** file for more information.
+
+---
+
+# ❤️ Support
+
+If you enjoy using **AuthSystem**, consider leaving a ⭐ on GitHub and sharing it with your community.
+
+Developed with ❤️ by **zImpoo**
+
+- Telegram → https://t.me/tentava
+- Discord → https://discord.com/users/Impopite
