@@ -23,6 +23,7 @@ public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
 
     private HikariCP hikariCP;
     private AuthTable authTable;
+    private BukkitAudiences adventure;
 
     @Override
     public void onEnable() {
@@ -35,8 +36,8 @@ public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
         getLogger().info(CYAN + "====================================" + RESET);
 
         BukkitAudiences adventure = BukkitAudiences.create(this);
+        this.adventure = adventure;
         this.configLoader = new ConfigLoader(this, adventure).load();
-        this.configLoader.load();
         this.langLoader = configLoader.getLangLoader();
         this.authManager = new BaseAuthManager(this);
 
@@ -62,6 +63,7 @@ public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
     @Override
     public void onDisable() {
         hikariCP.close();
+        adventure.close();
 
         getLogger().info("");
         getLogger().info(RED + "====================================" + RESET);

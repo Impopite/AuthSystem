@@ -1,6 +1,7 @@
 package it.impo.authSystem.server.listeners;
 
 import it.impo.authSystem.AuthSystem;
+import it.impo.authSystem.config.constant.ConfigKey;
 import it.impo.authSystem.config.constant.LangKey;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class PlayerJoinQuitListener implements Listener {
         Player player = event.getPlayer();
         plugin.getAuthManager().onJoin(player);
 
-        int timeoutSeconds = plugin.getConfig().getInt("auth.timeout-seconds", 60);
+        int timeoutSeconds = plugin.getConfigLoader().get(ConfigKey.TIMEOUT_SECONDS, 60);
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (!player.isOnline()) return;

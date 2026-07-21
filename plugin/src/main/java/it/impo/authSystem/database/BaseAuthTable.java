@@ -29,7 +29,7 @@ public class BaseAuthTable extends AuthTable {
                 premium       TINYINT(1)   NOT NULL DEFAULT 0,
                 UNIQUE KEY uq_username (username),
                 UNIQUE KEY uq_uuid     (uuid)
-            ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+            );
             """;
 
     @Language("SQL")
@@ -38,19 +38,19 @@ public class BaseAuthTable extends AuthTable {
 
     @Language("SQL")
     private static final String DELETE_PLAYER =
-            "DELETE FROM auth_players WHERE username = ?;";
+            "DELETE FROM auth_players WHERE uuid = ?;";
 
     @Language("SQL")
     private static final String UPDATE_PASSWORD =
-            "UPDATE auth_players SET password_hash = ? WHERE username = ?;";
+            "UPDATE auth_players SET password_hash = ? WHERE uuid = ?;";
 
     @Language("SQL")
     private static final String UPDATE_LAST_IP =
-            "UPDATE auth_players SET last_ip = ? WHERE username = ?;";
+            "UPDATE auth_players SET last_ip = ? WHERE uuid = ?;";
 
     @Language("SQL")
     private static final String UPDATE_PREMIUM =
-            "UPDATE auth_players SET premium = ? WHERE username = ?;";
+            "UPDATE auth_players SET premium = ? WHERE uuid = ?;";
 
     @Language("SQL")
     private static final String SELECT_BY_NAME =
@@ -62,11 +62,11 @@ public class BaseAuthTable extends AuthTable {
 
     @Language("SQL")
     private static final String SELECT_EXISTS =
-            "SELECT 1 FROM auth_players WHERE username = ? LIMIT 1;";
+            "SELECT 1 FROM auth_players WHERE uuid = ? LIMIT 1;";
 
     @Language("SQL")
     private static final String SELECT_LAST_IP =
-            "SELECT last_ip FROM auth_players WHERE username = ?;";
+            "SELECT last_ip FROM auth_players WHERE uuid = ?;";
 
     @Language("SQL")
     private static final String SELECT_PREMIUM =
@@ -104,12 +104,12 @@ public class BaseAuthTable extends AuthTable {
     }
 
     @Override
-    public CompletableFuture<Boolean> unregisterPlayer(String username) {
+    public CompletableFuture<Boolean> unregisterPlayer(UUID uuid) {
         return supplyAsync(() -> {
             try (Connection c = dataSource.getConnection();
                  PreparedStatement ps = c.prepareStatement(DELETE_PLAYER)) {
 
-                ps.setString(1, username.toLowerCase());
+                ps.setString(1, uuid.toString());
                 return ps.executeUpdate() > 0;
 
             } catch (SQLException e) {
@@ -120,13 +120,13 @@ public class BaseAuthTable extends AuthTable {
     }
 
     @Override
-    public CompletableFuture<Boolean> updatePassword(String username, String newPasswordHash) {
+    public CompletableFuture<Boolean> updatePassword(UUID uuid, String newPasswordHash) {
         return supplyAsync(() -> {
             try (Connection c = dataSource.getConnection();
                  PreparedStatement ps = c.prepareStatement(UPDATE_PASSWORD)) {
 
                 ps.setString(1, newPasswordHash);
-                ps.setString(2, username.toLowerCase());
+                ps.setString(2, uuid.toString());
                 return ps.executeUpdate() > 0;
 
             } catch (SQLException e) {
@@ -137,13 +137,13 @@ public class BaseAuthTable extends AuthTable {
     }
 
     @Override
-    public CompletableFuture<Boolean> updateLastIp(String username, String newIp) {
+    public CompletableFuture<Boolean> updateLastIp(UUID uuid, String newIp) {
         return supplyAsync(() -> {
             try (Connection c = dataSource.getConnection();
                  PreparedStatement ps = c.prepareStatement(UPDATE_LAST_IP)) {
 
                 ps.setString(1, newIp);
-                ps.setString(2, username.toLowerCase());
+                ps.setString(2, uuid.toString());
                 return ps.executeUpdate() > 0;
 
             } catch (SQLException e) {
@@ -154,13 +154,13 @@ public class BaseAuthTable extends AuthTable {
     }
 
     @Override
-    public CompletableFuture<Boolean> setPremium(String username, boolean isPremium) {
+    public CompletableFuture<Boolean> setPremium(UUID uuid, boolean isPremium) {
         return supplyAsync(() -> {
             try (Connection c = dataSource.getConnection();
                  PreparedStatement ps = c.prepareStatement(UPDATE_PREMIUM)) {
 
                 ps.setBoolean(1, isPremium);
-                ps.setString(2, username.toLowerCase());
+                ps.setString(2, uuid.toString());
                 return ps.executeUpdate() > 0;
 
             } catch (SQLException e) {
@@ -182,7 +182,8 @@ public class BaseAuthTable extends AuthTable {
                 return Optional.of(playerDataFromResult(rs));
 
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                return Optional.empty();
             }
         });
     }
@@ -199,18 +200,19 @@ public class BaseAuthTable extends AuthTable {
                 return Optional.of(playerDataFromResult(rs));
 
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                return Optional.empty();
             }
         });
     }
 
     @Override
-    public CompletableFuture<Boolean> isRegistered(String username) {
+    public CompletableFuture<Boolean> isRegistered(UUID uuid) {
         return supplyAsync(() -> {
             try (Connection c = dataSource.getConnection();
                  PreparedStatement ps = c.prepareStatement(SELECT_EXISTS)) {
 
-                ps.setString(1, username.toLowerCase());
+                ps.setString(1, uuid.toString());
                 ResultSet rs = ps.executeQuery();
                 return rs.next();
 
@@ -222,18 +224,19 @@ public class BaseAuthTable extends AuthTable {
     }
 
     @Override
-    public CompletableFuture<Optional<String>> getLastIp(String username) {
+    public CompletableFuture<Optional<String>> getLastIp(UUID uuid) {
         return supplyAsync(() -> {
             try (Connection c = dataSource.getConnection();
                  PreparedStatement ps = c.prepareStatement(SELECT_LAST_IP)) {
 
-                ps.setString(1, username.toLowerCase());
+                ps.setString(1, uuid.toString());
                 ResultSet rs = ps.executeQuery();
                 if (!rs.next()) return Optional.empty();
                 return Optional.of(rs.getString("last_ip"));
 
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                return Optional.empty();
             }
         });
     }

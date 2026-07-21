@@ -9,7 +9,8 @@ public enum LangKey {
     GENERIC_ERROR("message.generic-error"),
     PLAYER_NOT_FOUND_IN_DATABASE("message.player-not-found-in-database"),
     TOO_MUCH_FAILED_TRY("message.too-much-failed-try"),
-    ACTION_BEFOR_LOGIN("message.action-before-login"),
+    ACTION_BEFORE_LOGIN("message.action-before-login"),
+    RELOAD_SUCCESS("message.reload-success"),
     LAST_IP("message.last-ip"),
     FAILED_AUTH_TIME("message.failed-auth-time"),
 
@@ -28,7 +29,7 @@ public enum LangKey {
     WRONG_PASSWORD_KICK("login.wrong-password-kick"),
     WRONG_PASSWORD_BAN("login.wrong-password-ban"),
 
-    PASSWORD_CHANGED("login.password-changed"),
+    PASSWORD_CHANGED("change-password.password-changed"),
     NEW_PASSWORD_TOO_SHORT("change-password.new-password-too-short"),
     OLD_PASSWORD_IS_WRONG("change-password.old-password-is-wrong"),
     ERROR_CHANGING_PASSWORD("change-password.error-changing-password"),

@@ -9,6 +9,7 @@ public enum ConfigKey {
     DATABASE_PORT("database.port"),
     DATABASE_SSL("database.ssl"),
 
+    TIMEOUT_SECONDS("auth.timeout-seconds"),
     TOO_MANY_ATTEMPTS("auth.too-many-attempts"),
     BAN_TIME("auth.ban-time"),
 

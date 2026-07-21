@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BaseAuthManager extends AuthManager {
 
     private static final int MAX_ATTEMPTS = 5;
+    private static final int MAX_IP_ATTEMPTS = 10;
     private static final long PREMIUM_CLICK_EXPIRE_MS = 10_000L;
 
     private final AuthSystem plugin;
@@ -29,7 +30,8 @@ public class BaseAuthManager extends AuthManager {
     private final Set<UUID> authenticated = ConcurrentHashMap.newKeySet();
     private final Set<UUID> waitingAuth = ConcurrentHashMap.newKeySet();
 
-    private final Map<UUID, Integer> failedAttempts  = new ConcurrentHashMap<>();
+    private final Map<UUID, Integer> failedAttempts = new ConcurrentHashMap<>();
+    private final Map<String, Integer> ipFailedAttempts = new ConcurrentHashMap<>();
     private final Map<UUID, Long> premiumFirstClick = new ConcurrentHashMap<>();
 
     public BaseAuthManager(AuthSystem plugin) {
@@ -48,10 +50,13 @@ public class BaseAuthManager extends AuthManager {
                 return;
             }
 
+            String ip = player.getAddress() != null
+                    ? player.getAddress().getAddress().getHostAddress()
+                    : "unknown";
+
             if (opt.get().premium()) {
                 authenticated.add(uuid);
-                plugin.getAuthTable().updateLastIp(player.getName(),
-                        player.getAddress() != null ? player.getAddress().getAddress().getHostAddress() : "unknown");
+                plugin.getAuthTable().updateLastIp(uuid, ip);
                 sync(() -> lang.send(player, LangKey.LOGIN_PREMIUM));
                 return;
             }
@@ -116,7 +121,17 @@ public class BaseAuthManager extends AuthManager {
             return;
         }
 
-        plugin.getAuthTable().getPlayerByName(player.getName()).thenAccept(opt -> {
+        String ip = player.getAddress() != null
+                ? player.getAddress().getAddress().getHostAddress()
+                : "unknown";
+
+        int ipAttempts = ipFailedAttempts.getOrDefault(ip, 0);
+        if (ipAttempts >= MAX_IP_ATTEMPTS) {
+            sync(() -> lang.send(player, LangKey.TOO_MUCH_FAILED_TRY));
+            return;
+        }
+
+        plugin.getAuthTable().getPlayerByUuid(uuid).thenAccept(opt -> {
             if (opt.isEmpty()) {
                 sync(() -> lang.send(player, LangKey.NEED_REGISTER));
                 return;
@@ -124,23 +139,23 @@ public class BaseAuthManager extends AuthManager {
 
             if (!BaseAuthTable.checkPassword(password, opt.get().hashedPassword())) {
                 int attempts = failedAttempts.merge(uuid, 1, Integer::sum);
+                ipFailedAttempts.merge(ip, 1, Integer::sum);
                 int remaining = MAX_ATTEMPTS - attempts;
 
                 if (remaining <= 0) {
                     sync(() -> lang.send(player, LangKey.TOO_MUCH_FAILED_TRY));
                     String too_many_attempts = plugin.getConfigLoader().get(ConfigKey.TOO_MANY_ATTEMPTS, "kick");
-                    if(too_many_attempts.equalsIgnoreCase("kick")) {
+                    if (too_many_attempts.equalsIgnoreCase("kick")) {
                         Bukkit.getScheduler().runTask(plugin, () ->
                                 player.kick(lang.get(LangKey.WRONG_PASSWORD_KICK))
                         );
-                    }else if(too_many_attempts.equalsIgnoreCase("ban")) {
+                    } else if (too_many_attempts.equalsIgnoreCase("ban")) {
                         BanList<PlayerProfile> banList = Bukkit.getBanList(BanList.Type.PROFILE);
                         banList.addBan(player.getPlayerProfile(), "Reason:", (Date) null, "Administration");
 
                         Bukkit.getScheduler().runTask(plugin, () ->
-                            player.kick(lang.get(LangKey.WRONG_PASSWORD_BAN))
+                                player.kick(lang.get(LangKey.WRONG_PASSWORD_BAN))
                         );
-
                     }
                     return;
                 }
@@ -150,11 +165,7 @@ public class BaseAuthManager extends AuthManager {
                 return;
             }
 
-            String ip = player.getAddress() != null
-                    ? player.getAddress().getAddress().getHostAddress()
-                    : "unknown";
-
-            plugin.getAuthTable().updateLastIp(player.getName(), ip);
+            plugin.getAuthTable().updateLastIp(uuid, ip);
 
             waitingAuth.remove(uuid);
             authenticated.add(uuid);
@@ -167,7 +178,7 @@ public class BaseAuthManager extends AuthManager {
     @Override
     public void changePassword(Player player, String oldPassword, String newPassword) {
         if (!authenticated.contains(player.getUniqueId())) {
-            lang.send(player, LangKey.ACTION_BEFOR_LOGIN);
+            lang.send(player, LangKey.ACTION_BEFORE_LOGIN);
             return;
         }
 
@@ -176,7 +187,9 @@ public class BaseAuthManager extends AuthManager {
             return;
         }
 
-        plugin.getAuthTable().getPlayerByName(player.getName()).thenAccept(opt -> {
+        UUID uuid = player.getUniqueId();
+
+        plugin.getAuthTable().getPlayerByUuid(uuid).thenAccept(opt -> {
             if (opt.isEmpty()) {
                 sync(() -> lang.send(player, LangKey.PLAYER_NOT_FOUND_IN_DATABASE));
                 return;
@@ -187,7 +200,7 @@ public class BaseAuthManager extends AuthManager {
                 return;
             }
 
-            plugin.getAuthTable().updatePassword(player.getName(), BaseAuthTable.hashPassword(newPassword))
+            plugin.getAuthTable().updatePassword(uuid, BaseAuthTable.hashPassword(newPassword))
                     .thenAccept(success -> sync(() -> {
                         if (success) lang.send(player, LangKey.PASSWORD_CHANGED);
                         else lang.send(player, LangKey.ERROR_CHANGING_PASSWORD);
@@ -202,50 +215,74 @@ public class BaseAuthManager extends AuthManager {
             return;
         }
 
-        plugin.getAuthTable().updatePassword(targetName, BaseAuthTable.hashPassword(newPassword))
-                .thenAccept(success -> sync(() -> {
-                    if (success) lang.send(admin, LangKey.ADMIN_CHANGE_PASSWORD, Placeholder.parsed("target_name", targetName));
-                    else lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
-                }));
-    }
-
-    @Override
-    public void unregister(Player admin, String targetName) {
-        plugin.getAuthTable().unregisterPlayer(targetName).thenAccept(success -> sync(() -> {
-            if (!success) {
+        plugin.getAuthTable().getPlayerByName(targetName).thenAccept(opt -> sync(() -> {
+            if (opt.isEmpty()) {
                 lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
                 return;
             }
 
-            Player target = Bukkit.getPlayerExact(targetName);
-            if (target != null) {
-                authenticated.remove(target.getUniqueId());
-                waitingAuth.add(target.getUniqueId());
-                lang.send(target, LangKey.UNREGISTERED_BY_ADMIN);
-            }
-            lang.send(admin, LangKey.UNREGISTERED_ADMIN, Placeholder.parsed("target_name", targetName));
+            UUID targetUuid = opt.get().uuid();
+            plugin.getAuthTable().updatePassword(targetUuid, BaseAuthTable.hashPassword(newPassword))
+                    .thenAccept(success -> sync(() -> {
+                        if (success) lang.send(admin, LangKey.ADMIN_CHANGE_PASSWORD, Placeholder.parsed("target_name", targetName));
+                        else lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
+                    }));
         }));
     }
 
     @Override
+    public void unregister(Player admin, String targetName) {
+        plugin.getAuthTable().getPlayerByName(targetName).thenAccept(opt -> {
+            if (opt.isEmpty()) {
+                sync(() -> lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE));
+                return;
+            }
+
+            UUID targetUuid = opt.get().uuid();
+            plugin.getAuthTable().unregisterPlayer(targetUuid).thenAccept(success -> sync(() -> {
+                if (!success) {
+                    lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
+                    return;
+                }
+
+                Player target = Bukkit.getPlayerExact(targetName);
+                if (target != null) {
+                    authenticated.remove(target.getUniqueId());
+                    waitingAuth.add(target.getUniqueId());
+                    lang.send(target, LangKey.UNREGISTERED_BY_ADMIN);
+                }
+                lang.send(admin, LangKey.UNREGISTERED_ADMIN, Placeholder.parsed("target_name", targetName));
+            }));
+        });
+    }
+
+    @Override
     public void checkIp(Player admin, String targetName) {
-        plugin.getAuthTable().getLastIp(targetName).thenAccept(opt -> sync(() -> {
-            if (opt.isEmpty()) lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
-            else lang.send(admin, LangKey.LAST_IP,
-                    Placeholder.parsed("target_name", targetName),
-                    Placeholder.parsed("last_ip", opt.get()));
-        }));
+        plugin.getAuthTable().getPlayerByName(targetName).thenAccept(opt -> {
+            if (opt.isEmpty()) {
+                sync(() -> lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE));
+                return;
+            }
+
+            UUID targetUuid = opt.get().uuid();
+            plugin.getAuthTable().getLastIp(targetUuid).thenAccept(ipOpt -> sync(() -> {
+                if (ipOpt.isEmpty()) lang.send(admin, LangKey.PLAYER_NOT_FOUND_IN_DATABASE);
+                else lang.send(admin, LangKey.LAST_IP,
+                        Placeholder.parsed("target_name", targetName),
+                        Placeholder.parsed("last_ip", ipOpt.get()));
+            }));
+        });
     }
 
     @Override
     public void handlePremium(Player player) {
         if (!authenticated.contains(player.getUniqueId())) {
-            lang.send(player, LangKey.ACTION_BEFOR_LOGIN);
+            lang.send(player, LangKey.ACTION_BEFORE_LOGIN);
             return;
         }
 
         UUID uuid = player.getUniqueId();
-        long now  = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
 
         Long firstClick = premiumFirstClick.get(uuid);
 
@@ -264,7 +301,7 @@ public class BaseAuthManager extends AuthManager {
             }
 
             boolean newState = !opt.get().premium();
-            plugin.getAuthTable().setPremium(player.getName(), newState)
+            plugin.getAuthTable().setPremium(uuid, newState)
                     .thenAccept(success -> sync(() -> {
                         if (!success) {
                             lang.send(player, LangKey.GENERIC_ERROR);

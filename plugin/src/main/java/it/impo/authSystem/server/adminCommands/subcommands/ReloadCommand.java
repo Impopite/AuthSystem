@@ -22,7 +22,7 @@ public class ReloadCommand {
                     }
 
                     plugin.getConfigLoader().reload();
-                    player.sendMessage("§aConfigurazione ricaricata.");
+                    plugin.getLangLoader().send(player, LangKey.RELOAD_SUCCESS);
                 });
     }
 }

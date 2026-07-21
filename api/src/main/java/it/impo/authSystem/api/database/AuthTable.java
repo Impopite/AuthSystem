@@ -13,21 +13,21 @@ public abstract class AuthTable {
 
     public abstract CompletableFuture<Boolean> registerPlayer(String username, UUID uuid, String passwordHash, String ip);
 
-    public abstract CompletableFuture<Boolean> unregisterPlayer(String username);
+    public abstract CompletableFuture<Boolean> unregisterPlayer(UUID uuid);
 
-    public abstract CompletableFuture<Boolean> updatePassword(String username, String newPasswordHash);
+    public abstract CompletableFuture<Boolean> updatePassword(UUID uuid, String newPasswordHash);
 
-    public abstract CompletableFuture<Boolean> updateLastIp(String username, String newIp);
+    public abstract CompletableFuture<Boolean> updateLastIp(UUID uuid, String newIp);
 
-    public abstract CompletableFuture<Boolean> setPremium(String username, boolean isPremium);
+    public abstract CompletableFuture<Boolean> setPremium(UUID uuid, boolean isPremium);
 
     public abstract CompletableFuture<Optional<PlayerData>> getPlayerByName(String username);
 
     public abstract CompletableFuture<Optional<PlayerData>> getPlayerByUuid(UUID uuid);
 
-    public abstract CompletableFuture<Boolean> isRegistered(String username);
+    public abstract CompletableFuture<Boolean> isRegistered(UUID uuid);
 
-    public abstract CompletableFuture<Optional<String>> getLastIp(String username);
+    public abstract CompletableFuture<Optional<String>> getLastIp(UUID uuid);
 
     public abstract CompletableFuture<Boolean> isPremium(UUID uuid);
 }
