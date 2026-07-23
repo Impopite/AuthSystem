@@ -22,6 +22,7 @@ message:
   last-ip: "<normal>Ultimo IP di <white><target_name> <normal>: <white><last_ip>"
   failed-auth-time: "<error>Non ti sei autenticato in tempo!"
   reload-success: "<success>Configurazione ricaricata con successo!"
+  update-available: "<success>Una nuova versione è disponibile! (<latest_version>) - <normal>https://modrinth.com/plugin/authenticationsystem"
 
 # Messaggi del register
 register:

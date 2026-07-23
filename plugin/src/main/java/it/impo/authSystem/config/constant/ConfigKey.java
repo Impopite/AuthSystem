@@ -13,7 +13,8 @@ public enum ConfigKey {
     TOO_MANY_ATTEMPTS("auth.too-many-attempts"),
     BAN_TIME("auth.ban-time"),
 
-    LANG_FILE("generic.lang");
+    LANG_FILE("generic.lang"),
+    UPDATE_CHECKER("generic.update-checker");
 
     private final String path;
 

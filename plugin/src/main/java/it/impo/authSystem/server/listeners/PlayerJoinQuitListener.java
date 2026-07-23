@@ -3,6 +3,7 @@ package it.impo.authSystem.server.listeners;
 import it.impo.authSystem.AuthSystem;
 import it.impo.authSystem.config.constant.ConfigKey;
 import it.impo.authSystem.config.constant.LangKey;
+import it.impo.authSystem.utils.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,10 @@ public class PlayerJoinQuitListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         plugin.getAuthManager().onJoin(player);
+
+        if (player.hasPermission(Permission.STAFF.getPermission())) {
+            plugin.getUpdateChecker().notify(player);
+        }
 
         int timeoutSeconds = plugin.getConfigLoader().get(ConfigKey.TIMEOUT_SECONDS, 60);
 

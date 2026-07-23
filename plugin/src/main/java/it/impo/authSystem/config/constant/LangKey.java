@@ -11,6 +11,7 @@ public enum LangKey {
     TOO_MUCH_FAILED_TRY("message.too-much-failed-try"),
     ACTION_BEFORE_LOGIN("message.action-before-login"),
     RELOAD_SUCCESS("message.reload-success"),
+    UPDATE_AVAILABLE("message.update-available"),
     LAST_IP("message.last-ip"),
     FAILED_AUTH_TIME("message.failed-auth-time"),
 

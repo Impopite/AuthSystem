@@ -10,7 +10,9 @@ import it.impo.authSystem.database.utils.DatabaseCredentials;
 import it.impo.authSystem.database.utils.HikariCP;
 import it.impo.authSystem.loader.Loader;
 import it.impo.authSystem.manager.BaseAuthManager;
+import it.impo.authSystem.update.UpdateChecker;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
@@ -24,6 +26,7 @@ public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
     private HikariCP hikariCP;
     private AuthTable authTable;
     private BukkitAudiences adventure;
+    private UpdateChecker updateChecker;
 
     @Override
     public void onEnable() {
@@ -48,6 +51,8 @@ public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
         Loader loader = new Loader(this);
         loader.load(authTable);
 
+        this.updateChecker = new UpdateChecker(this);
+        this.updateChecker.checkAsync();
 
         long took = System.currentTimeMillis() - start;
 
@@ -97,6 +102,10 @@ public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
 
     public LangLoader getLangLoader(){
         return langLoader;
+    }
+
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
     }
 
     public String getProjectName() {

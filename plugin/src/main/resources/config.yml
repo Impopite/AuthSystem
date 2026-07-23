@@ -2,6 +2,7 @@
 
 generic:
   lang: EN_us # AVAILABLE ( EN_us, IT_it )
+  update-checker: true
 
 database:
   host: "localhost"
