@@ -1,140 +1,67 @@
 # AuthSystem
 
-> 🔐 **Advanced Authentication System for Paper & Spigot Servers**
+[![Version](https://img.shields.io/badge/version-1.0.1-blue)](https://github.com/Impopite/AuthSystem/releases)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-21+-orange)](https://adoptium.net/)
+[![Paper](https://img.shields.io/badge/Paper-1.21+-red)](https://papermc.io/)
 
-AuthSystem is a modern authentication plugin built for Minecraft servers. It provides secure player authentication, MySQL storage, multilingual support, and a developer-friendly API to easily integrate authentication into your own plugins.
-
----
-
-## 🚀 Features
-
-### 🔑 Secure Authentication
-Fast and reliable login & registration system with secure data validation.
-
-### 💾 MySQL Support
-Powered by **HikariCP** for high-performance database connection pooling.
-
-### 🌍 Multilingual
-Built-in language support with configurable translations (IT/EN).
-
-### ⚙️ Fully Configurable
-Simple YAML configuration for messages, settings, and database options.
-
-### 📚 Developer API
-Easily access authentication status and player data from your own plugins.
-
-### 👥 Centralized User Management
-Manage authenticated users efficiently across your server.
+A secure and lightweight authentication plugin for Minecraft servers, built with Paper API.
 
 ---
 
-# 📦 Installation
+## Features
 
-1. Download the latest **AuthSystem.jar**
-2. Place it inside your server's **plugins/** folder
-3. Start or restart your server
-4. Configure the plugin in the generated configuration files
-5. You're ready to go!
+- **Registration & Login** — Secure player authentication with BCrypt password hashing
+- **Premium Authentication** — Toggle online-mode login for Mojang verified players
+- **MySQL Storage** — Persistent data with HikariCP connection pooling
+- **Brute-force Protection** — Configurable kick or timed ban after too many failed attempts
+- **Authentication Timeout** — Automatic disconnection for players who don't authenticate in time
+- **Multilingual** — Built-in English and Italian language support, easily extensible
+- **Admin Tools** — Password reset, player unregister, IP lookup, and config reload
+- **Developer API** — Lightweight API for integration with other plugins via JitPack
+- **Update Checker** — Notifies admins of new releases on startup
 
 ---
 
-# 🛠 Requirements
+## Requirements
 
-- Paper **1.21+**
 - Java **21+**
-- MySQL Database
+- Paper **1.21+** (Spigot/Bukkit compatible)
+- MySQL **5.7+** or MariaDB **10.3+**
 
 ---
 
-# ✅ Compatibility
+## Installation
 
-| Software | Supported |
-|----------|-----------|
-| Paper | ✅ |
-| Spigot | ✅ |
-| Bukkit | ✅ |
-
----
-
-# 📚 Developer API
-
-AuthSystem exposes a lightweight API that allows developers to:
-
-- Check if a player is authenticated
-- Access authentication data
-- Integrate custom authentication workflows
-- Manage user information
-
-See the [documentation](https://impoo.gitbook.io/authenticationsystem)
-
-## Maven
-
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-
-<dependencies>
-    <dependency>
-        <groupId>com.github.Impopite</groupId>
-        <artifactId>AuthSystem</artifactId>
-        <version>VERSION</version>
-        <scope>provided</scope>
-    </dependency>
-</dependencies>
-```
-
-## Gradle
-
-```groovy
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-    compileOnly 'com.github.Impopite:AuthSystem:VERSION'
-}
-```
-
-## Gradle (Kotlin DSL)
-
-```kotlin
-repositories {
-    maven("https://jitpack.io")
-}
-
-dependencies {
-    compileOnly("com.github.Impopite:AuthSystem:VERSION")
-}
-```
----
-
-# 🐞 Reporting Bugs
-
-Found a bug or have a feature request?
-
-Open an issue on GitHub:
-
-https://github.com/Impopite/AuthSystem/issues
+1. Download the latest `AuthSystem.jar` from the [releases page](https://modrinth.com/plugin/authenticationsystem)
+2. Place the JAR in your server's `plugins/` folder
+3. Start or restart the server
+4. Edit `plugins/AuthSystem/config.yml` with your database credentials
+5. Reload or restart the server to apply changes
 
 ---
 
-# 📄 License
+## Documentation
 
-Licensed under the **MIT License**.
+Full documentation including commands, permissions, configuration, and API reference:
 
-See the **LICENSE** file for more information.
+**[DOCUMENTATION](https://impoo.gitbook.io/authenticationsystem)**
 
 ---
 
-# ❤️ Support
+## Bug Reports & Feature Requests
 
-If you enjoy using **AuthSystem**, consider leaving a ⭐ on GitHub and sharing it with your community.
+Found a bug or have a suggestion? Open an issue on [GitHub Issues](https://github.com/Impopite/AuthSystem/issues).
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
 
 Developed by **zImpoo**
 
-- Telegram → https://t.me/tentava
-- Discord → https://discord.com/users/Impopite
+- Telegram: [@tentava](https://t.me/tentava)
+- Discord: [Impopite](https://discord.com/users/Impopite)
