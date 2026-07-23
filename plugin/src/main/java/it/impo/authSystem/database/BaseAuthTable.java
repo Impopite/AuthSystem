@@ -10,10 +10,14 @@ import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 public class BaseAuthTable extends AuthTable {
+
+    private static final Logger LOGGER = Logger.getLogger("AuthSystem");
 
     private final HikariDataSource dataSource;
 
@@ -97,7 +101,7 @@ public class BaseAuthTable extends AuthTable {
                 return ps.executeUpdate() > 0;
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to register player: " + username, e);
                 return false;
             }
         });
@@ -113,7 +117,7 @@ public class BaseAuthTable extends AuthTable {
                 return ps.executeUpdate() > 0;
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to unregister player: " + uuid, e);
                 return false;
             }
         });
@@ -130,7 +134,7 @@ public class BaseAuthTable extends AuthTable {
                 return ps.executeUpdate() > 0;
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to update password for: " + uuid, e);
                 return false;
             }
         });
@@ -147,7 +151,7 @@ public class BaseAuthTable extends AuthTable {
                 return ps.executeUpdate() > 0;
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to update last IP for: " + uuid, e);
                 return false;
             }
         });
@@ -164,7 +168,7 @@ public class BaseAuthTable extends AuthTable {
                 return ps.executeUpdate() > 0;
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to set premium for: " + uuid, e);
                 return false;
             }
         });
@@ -182,7 +186,7 @@ public class BaseAuthTable extends AuthTable {
                 return Optional.of(playerDataFromResult(rs));
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to get player by name: " + username, e);
                 return Optional.empty();
             }
         });
@@ -200,7 +204,7 @@ public class BaseAuthTable extends AuthTable {
                 return Optional.of(playerDataFromResult(rs));
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to get player by UUID: " + uuid, e);
                 return Optional.empty();
             }
         });
@@ -217,7 +221,7 @@ public class BaseAuthTable extends AuthTable {
                 return rs.next();
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to check registration for: " + uuid, e);
                 return false;
             }
         });
@@ -235,7 +239,7 @@ public class BaseAuthTable extends AuthTable {
                 return Optional.of(rs.getString("last_ip"));
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to get last IP for: " + uuid, e);
                 return Optional.empty();
             }
         });
@@ -253,7 +257,7 @@ public class BaseAuthTable extends AuthTable {
                 return rs.getBoolean("premium");
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Failed to check premium status for: " + uuid, e);
                 return false;
             }
         });

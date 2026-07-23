@@ -12,7 +12,6 @@ import it.impo.authSystem.loader.Loader;
 import it.impo.authSystem.manager.BaseAuthManager;
 import it.impo.authSystem.update.UpdateChecker;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AuthSystem extends JavaPlugin implements AuthSystemApi {

@@ -3,6 +3,7 @@ package it.impo.authSystem.server.adminCommands.subcommands;
 import dev.jorel.commandapi.CommandAPICommand;
 import it.impo.authSystem.AuthSystem;
 import it.impo.authSystem.config.constant.LangKey;
+import it.impo.authSystem.manager.BaseAuthManager;
 import it.impo.authSystem.utils.Permission;
 
 public class ReloadCommand {
@@ -22,6 +23,7 @@ public class ReloadCommand {
                     }
 
                     plugin.getConfigLoader().reload();
+                    ((BaseAuthManager) plugin.getAuthManager()).reload();
                     plugin.getLangLoader().send(player, LangKey.RELOAD_SUCCESS);
                 });
     }

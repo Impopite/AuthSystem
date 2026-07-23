@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class BaseAuthManager extends AuthManager {
 
@@ -25,7 +26,7 @@ public class BaseAuthManager extends AuthManager {
     private static final long PREMIUM_CLICK_EXPIRE_MS = 10_000L;
 
     private final AuthSystem plugin;
-    private final LangLoader lang;
+    private LangLoader lang;
 
     private final Set<UUID> authenticated = ConcurrentHashMap.newKeySet();
     private final Set<UUID> waitingAuth = ConcurrentHashMap.newKeySet();
@@ -36,6 +37,10 @@ public class BaseAuthManager extends AuthManager {
 
     public BaseAuthManager(AuthSystem plugin) {
         this.plugin = plugin;
+        this.lang = plugin.getLangLoader();
+    }
+
+    public void reload() {
         this.lang = plugin.getLangLoader();
     }
 
@@ -143,20 +148,19 @@ public class BaseAuthManager extends AuthManager {
                 int remaining = MAX_ATTEMPTS - attempts;
 
                 if (remaining <= 0) {
-                    sync(() -> lang.send(player, LangKey.TOO_MUCH_FAILED_TRY));
-                    String too_many_attempts = plugin.getConfigLoader().get(ConfigKey.TOO_MANY_ATTEMPTS, "kick");
-                    if (too_many_attempts.equalsIgnoreCase("kick")) {
-                        Bukkit.getScheduler().runTask(plugin, () ->
-                                player.kick(lang.get(LangKey.WRONG_PASSWORD_KICK))
-                        );
-                    } else if (too_many_attempts.equalsIgnoreCase("ban")) {
-                        BanList<PlayerProfile> banList = Bukkit.getBanList(BanList.Type.PROFILE);
-                        banList.addBan(player.getPlayerProfile(), "Reason:", (Date) null, "Administration");
-
-                        Bukkit.getScheduler().runTask(plugin, () ->
-                                player.kick(lang.get(LangKey.WRONG_PASSWORD_BAN))
-                        );
-                    }
+                    sync(() -> {
+                        lang.send(player, LangKey.TOO_MUCH_FAILED_TRY);
+                        String action = plugin.getConfigLoader().get(ConfigKey.TOO_MANY_ATTEMPTS, "kick");
+                        if (action.equalsIgnoreCase("ban")) {
+                            int banMinutes = plugin.getConfigLoader().get(ConfigKey.BAN_TIME, 60);
+                            Date expiry = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(banMinutes));
+                            BanList<PlayerProfile> banList = Bukkit.getBanList(BanList.Type.PROFILE);
+                            banList.addBan(player.getPlayerProfile(), "Too many failed attempts", expiry, "AuthSystem");
+                            player.kick(lang.get(LangKey.WRONG_PASSWORD_BAN));
+                        } else {
+                            player.kick(lang.get(LangKey.WRONG_PASSWORD_KICK));
+                        }
+                    });
                     return;
                 }
 
