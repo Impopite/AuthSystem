@@ -28,7 +28,7 @@ public class PlayerCommandListener implements Listener {
 
         if (ALLOWED_COMMANDS.contains(baseCommand)) return;
 
-        plugin.getLangLoader().send(event.getPlayer(), LangKey.ACTION_BEFOR_LOGIN);
+        plugin.getLangLoader().send(event.getPlayer(), LangKey.ACTION_BEFORE_LOGIN);
         event.setCancelled(true);
     }
 }

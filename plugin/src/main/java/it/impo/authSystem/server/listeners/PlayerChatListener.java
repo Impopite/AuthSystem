@@ -19,7 +19,7 @@ public class PlayerChatListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         if (!plugin.getAuthManager().isAuthenticated(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
-            plugin.getLangLoader().send(event.getPlayer(), LangKey.ACTION_BEFOR_LOGIN);
+            plugin.getLangLoader().send(event.getPlayer(), LangKey.ACTION_BEFORE_LOGIN);
         }
     }
 }
