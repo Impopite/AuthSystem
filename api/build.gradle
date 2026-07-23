@@ -5,22 +5,15 @@ plugins {
 group = 'com.github.Impopite'
 version = '1.0'
 
-tasks.register('sourceJar', Jar) {
-    from sourceSets.main.allJava
-    archiveClassifier = "sources"
-}
-
-tasks.register('javadocJar', Jar) {
-    from javadoc
-    archiveClassifier = "javadoc"
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 publishing {
     publications {
         library(MavenPublication) {
             from components.java
-            artifact sourceJar
-            artifact javadocJar
         }
     }
 }
