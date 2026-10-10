@@ -1,5 +1,7 @@
 package it.impo.authSystem;
 
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIPaperConfig;
 import it.impo.authSystem.api.AuthSystemApi;
 import it.impo.authSystem.api.database.AuthTable;
 import it.impo.authSystem.api.manager.AuthManager;
@@ -28,7 +30,13 @@ public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
     private UpdateChecker updateChecker;
 
     @Override
+    public void onLoad() {
+        CommandAPI.onLoad(new CommandAPIPaperConfig(this).silentLogs(true));
+    }
+
+    @Override
     public void onEnable() {
+        CommandAPI.onEnable();
         long start = System.currentTimeMillis();
 
         getLogger().info("");
@@ -66,8 +74,9 @@ public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
 
     @Override
     public void onDisable() {
-        hikariCP.close();
-        adventure.close();
+        CommandAPI.onDisable();
+        if (hikariCP != null) hikariCP.close();
+        if (adventure != null) adventure.close();
 
         getLogger().info("");
         getLogger().info(RED + "====================================" + RESET);
