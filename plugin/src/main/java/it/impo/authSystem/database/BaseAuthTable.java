@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,6 +22,7 @@ public class BaseAuthTable extends AuthTable {
     private static final Logger LOGGER = Logger.getLogger("AuthSystem");
 
     private final HikariDataSource dataSource;
+    private static final ExecutorService PASSWORD_EXECUTOR = Executors.newFixedThreadPool(2);
 
     @Language("SQL")
     private static final String CREATE_TABLE = """
@@ -274,11 +277,11 @@ public class BaseAuthTable extends AuthTable {
         );
     }
 
-    public static String hashPassword(String plainPassword) {
-        return BCrypt.hashpw(plainPassword, BCrypt.gensalt(12));
+    public static CompletableFuture<String> hashPassword(String plainPassword) {
+        return CompletableFuture.supplyAsync(() -> BCrypt.hashpw(plainPassword, BCrypt.gensalt(12)), PASSWORD_EXECUTOR);
     }
 
-    public static boolean checkPassword(String plainPassword, String storedHash) {
-        return BCrypt.checkpw(plainPassword, storedHash);
+    public static CompletableFuture<Boolean> checkPassword(String plainPassword, String storedHash) {
+        return CompletableFuture.supplyAsync(() -> BCrypt.checkpw(plainPassword, storedHash), PASSWORD_EXECUTOR);
     }
 }

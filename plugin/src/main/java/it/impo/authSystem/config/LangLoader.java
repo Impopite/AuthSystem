@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 public class LangLoader {
@@ -25,6 +26,8 @@ public class LangLoader {
     private final Configuration langConfig;
     private final BukkitAudiences adventure;
     private final Map<String, String> palette;
+
+    private final Map<LangKey, Component> componentCache = new ConcurrentHashMap<>();
 
     private LangLoader(Configuration langConfig, BukkitAudiences adventure) {
         this.langConfig = langConfig;
@@ -46,7 +49,7 @@ public class LangLoader {
     }
 
     public @NotNull Component get(@NotNull LangKey key, TagResolver... resolvers) {
-        return prefix().append(component(key, resolvers));
+        return prefix().append(deserialize(langConfig.getString(key.getPath(), ""), resolvers));
     }
 
     public @NotNull Component get(@NotNull LangKey key) {
@@ -57,9 +60,15 @@ public class LangLoader {
         return component(LangKey.PREFIX);
     }
 
-    public @NotNull Component component(@NotNull LangKey key, TagResolver... resolvers) {
-        String raw = langConfig.getString(key.getPath(), "");
+    public @NotNull Component component(@NotNull LangKey key) {
+        return componentCache.computeIfAbsent(key, this::deserialize);
+    }
 
+    private @NotNull Component deserialize(@NotNull LangKey key) {
+        return deserialize(langConfig.getString(key.getPath(), ""));
+    }
+
+    private @NotNull Component deserialize(String raw, TagResolver... resolvers) {
         TagResolver paletteResolver = TagResolver.resolver(
                 palette.entrySet().stream()
                         .map(e -> Placeholder.parsed(e.getKey(), e.getValue()))
@@ -69,16 +78,12 @@ public class LangLoader {
         return MINI_MESSAGE.deserialize(raw, TagResolver.resolver(paletteResolver, TagResolver.resolver(resolvers)));
     }
 
-    public @NotNull Component component(@NotNull LangKey key) {
-        return component(key, TagResolver.empty());
-    }
-
     public void send(@NotNull CommandSender sender, @NotNull LangKey key, TagResolver... resolvers) {
         adventure.sender(sender).sendMessage(get(key, resolvers));
     }
 
     public void send(@NotNull CommandSender sender, @NotNull LangKey key) {
-        send(sender, key, TagResolver.empty());
+        adventure.sender(sender).sendMessage(get(key));
     }
 
     public boolean isEmpty(@NotNull LangKey key) {
