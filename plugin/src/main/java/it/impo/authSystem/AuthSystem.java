@@ -74,6 +74,9 @@ public final class AuthSystem extends JavaPlugin implements AuthSystemApi {
 
     @Override
     public void onDisable() {
+        try {
+            CommandAPI.unregister("authsystem");
+        } catch (Exception ignored) {}
         CommandAPI.onDisable();
         if (hikariCP != null) hikariCP.close();
         if (adventure != null) adventure.close();
