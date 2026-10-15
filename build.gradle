@@ -35,9 +35,6 @@ subprojects {
         maven {
             url = 'https://jitpack.io'
         }
-        maven {
-            url = 'https://repo.jorel.dev/'
-        }
     }
 
     dependencies {
